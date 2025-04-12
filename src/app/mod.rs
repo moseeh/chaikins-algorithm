@@ -29,9 +29,9 @@ impl EventHandler for AppState {
     fn mouse_button_down_event(
         &mut self,
         _ctx: &mut Context,
-        _button: ggez::event::MouseButton,
-        _x: f32,
-        _y: f32,
+        button: ggez::event::MouseButton,
+        x: f32,
+        y: f32,
     ) {
         if button == ggez::event::MouseButton::Left {
             events::handle_mouse_click(self, x, y)
