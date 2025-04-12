@@ -9,3 +9,11 @@ pub struct AppState {
     pub animating: bool,
 }
 
+impl AppState {
+    pub fn new(_ctx: &mut Context) -> Self {
+        Self {
+            control_points: Vec::new(),
+            animating: false,
+        }
+    }
+}
