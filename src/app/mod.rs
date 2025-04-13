@@ -23,7 +23,7 @@ impl EventHandler for AppState {
         // for now no update logic.
         Ok(())
     }
-    fn draw(&mut self, _ctx: &mut Context) -> GameResult {
+    fn draw(&mut self, ctx: &mut Context) -> GameResult {
         drawing::draw_canvas(ctx, &self.control_points)
     }
     fn mouse_button_down_event(
@@ -40,22 +40,20 @@ impl EventHandler for AppState {
     fn key_down_event(
         &mut self,
         ctx: &mut Context,
-        keycode: Option<ggez::event::KeyCode>,
+        keycode: ggez::event::KeyCode,
         _mods: ggez::input::keyboard::KeyMods,
         _repeat: bool,
     ) {
-        if some(key) = keycode {
-            match key {
-                ggez::event::KeyCode::Return => {
-                    if self.control_points.len() >= 2 {
-                        self.animating = true
-                    } else {
-                        println!("Please add at least 2 control points first.");
-                    }
+        match keycode {
+            ggez::event::KeyCode::Return => {
+                if self.control_points.len() >= 2 {
+                    self.animating = true
+                } else {
+                    println!("Please add at least 2 control points first.");
                 }
-                ggez::event::KeyCode::Escape => ggez::event::quit(ctx),
-                _ => {}
             }
+            ggez::event::KeyCode::Escape => ggez::event::quit(ctx),
+            _ => {}
         }
     }
 }
