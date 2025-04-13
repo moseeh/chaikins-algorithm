@@ -1,6 +1,6 @@
-use macroquad::prelude::*;
-use crate::point::Point;
 use crate::chaikin::chaikin;
+use crate::point::Point;
+use macroquad::prelude::*;
 
 pub async fn run() {
     let mut control_points: Vec<Point> = Vec::new();
@@ -20,11 +20,14 @@ pub async fn run() {
             y: mouse_position().1,
         };
 
-        if is_key_down(KeyCode::LeftShift) && is_mouse_button_pressed(MouseButton::Left) && !animating {
+        if is_mouse_button_pressed(MouseButton::Left) && !animating {
             control_points.push(mouse_pos);
         }
 
-        if is_mouse_button_pressed(MouseButton::Left) && !is_key_down(KeyCode::LeftShift) && !animating {
+        if is_mouse_button_pressed(MouseButton::Left)
+            && !is_key_down(KeyCode::LeftShift)
+            && !animating
+        {
             for (i, point) in control_points.iter().enumerate() {
                 if (point.x - mouse_pos.x).hypot(point.y - mouse_pos.y) < 10.0 {
                     dragging_index = Some(i);
@@ -86,7 +89,12 @@ pub async fn run() {
         }
 
         if control_points.len() == 1 {
-            draw_circle(control_points[0].x + 2.0, control_points[0].y + 2.0, 6.5, Color::new(0.0, 0.0, 0.0, 0.3));
+            draw_circle(
+                control_points[0].x + 2.0,
+                control_points[0].y + 2.0,
+                6.5,
+                Color::new(0.0, 0.0, 0.0, 0.3),
+            );
             draw_circle(control_points[0].x, control_points[0].y, 5.0, RED);
         } else if control_points.len() == 2 {
             draw_line(
@@ -101,14 +109,18 @@ pub async fn run() {
             let points = &curve_steps[step];
             for w in points.windows(2) {
                 draw_line(
-                    w[0].x + 2.0, w[0].y + 2.0,
-                    w[1].x + 2.0, w[1].y + 2.0,
+                    w[0].x + 2.0,
+                    w[0].y + 2.0,
+                    w[1].x + 2.0,
+                    w[1].y + 2.0,
                     4.0,
                     Color::new(0.0, 0.0, 0.0, 0.2),
                 );
                 draw_line(
-                    w[0].x, w[0].y,
-                    w[1].x, w[1].y,
+                    w[0].x,
+                    w[0].y,
+                    w[1].x,
+                    w[1].y,
                     2.5,
                     Color::new(0.1, 0.2, 0.6, 0.85),
                 );
@@ -125,8 +137,20 @@ pub async fn run() {
             draw_circle_lines(p.x, p.y, 7.0, 1.0, BLACK);
         }
 
-        draw_text("Shift+Click: Add Point | Drag: Move Point | Enter: Animate | C: Clear | Esc: Quit", 20.0, 30.0, 20.0, DARKGRAY);
-        draw_text(&format!("Max Steps: {}  |  Current Step: {}", max_steps, step + 1), 20.0, 55.0, 20.0, DARKGRAY);
+        draw_text(
+            "Shift+Click: Add Point | Drag: Move Point | Enter: Animate | C: Clear | Esc: Quit",
+            20.0,
+            30.0,
+            20.0,
+            DARKGRAY,
+        );
+        draw_text(
+            &format!("Max Steps: {}  |  Current Step: {}", max_steps, step + 1),
+            20.0,
+            55.0,
+            20.0,
+            DARKGRAY,
+        );
 
         next_frame().await;
     }
