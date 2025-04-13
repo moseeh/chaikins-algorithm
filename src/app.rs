@@ -138,18 +138,18 @@ pub async fn run() {
         }
 
         draw_text(
-            "Shift+Click: Add Point | Drag: Move Point | Enter: Animate | C: Clear | Esc: Quit",
+            "Click: Add Point | Drag: Move Point | Enter: Animate | C: Clear | Esc: Quit",
             20.0,
             30.0,
             20.0,
-            DARKGRAY,
+            BLACK,
         );
         draw_text(
             &format!("Max Steps: {}  |  Current Step: {}", max_steps, step + 1),
             20.0,
             55.0,
             20.0,
-            DARKGRAY,
+            BLACK,
         );
 
         next_frame().await;
