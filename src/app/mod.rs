@@ -1,12 +1,16 @@
-pub mod drawing;
-pub mod events; // handle events (mouse and keyboard inputs) // handle drawing on the canvas
-
+// Ensure you import the necessary items
 use ggez::event::EventHandler;
+use ggez::graphics::{Canvas, Color};
+use ggez::input::keyboard::{KeyCode, KeyInput};
 use ggez::{Context, GameResult};
+
+mod drawing;
 
 pub struct AppState {
     pub control_points: Vec<(f32, f32)>,
     pub animating: bool,
+    // Remove the persistent canvas; we don't need to store it between frames.
+    // canvas: Canvas,
 }
 
 impl AppState {
@@ -14,46 +18,52 @@ impl AppState {
         Self {
             control_points: Vec::new(),
             animating: false,
+            // No longer need a canvas in state.
+            // canvas: Canvas::from_frame(ctx, Color::WHITE),
         }
     }
 }
 
 impl EventHandler for AppState {
     fn update(&mut self, _ctx: &mut Context) -> GameResult {
-        // for now no update logic.
         Ok(())
     }
+
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
-        drawing::draw_canvas(ctx, &self.control_points)
+        // Create a new canvas for the current frame with the desired clear color.
+        let mut canvas = Canvas::from_frame(ctx, Color::WHITE);
+
+        // Draw to the canvas (pass the canvas as mutable reference)
+        drawing::draw_canvas(ctx, &self.control_points, &mut canvas)?;
+
+        // Finish the canvas to render the frame
+        canvas.finish(ctx)?;
+        Ok(())
     }
+
     fn mouse_button_down_event(
         &mut self,
         _ctx: &mut Context,
-        button: ggez::event::MouseButton,
+        _button: ggez::event::MouseButton,
         x: f32,
         y: f32,
-    ) {
-        if button == ggez::event::MouseButton::Left {
-            events::handle_mouse_click(self, x, y)
-        }
+    ) -> GameResult {
+        self.control_points.push((x, y));
+        Ok(())
     }
-    fn key_down_event(
-        &mut self,
-        ctx: &mut Context,
-        keycode: ggez::event::KeyCode,
-        _mods: ggez::input::keyboard::KeyMods,
-        _repeat: bool,
-    ) {
-        match keycode {
-            ggez::event::KeyCode::Return => {
+
+    fn key_down_event(&mut self, ctx: &mut Context, input: KeyInput, _repeat: bool) -> GameResult {
+        match input.keycode {
+            Some(KeyCode::Return) => {
                 if self.control_points.len() >= 2 {
-                    self.animating = true
+                    self.animating = true;
                 } else {
-                    println!("Please add at least 2 control points first.");
+                    println!("Add at least 2 points first");
                 }
             }
-            ggez::event::KeyCode::Escape => ggez::event::quit(ctx),
+            Some(KeyCode::Escape) => ctx.request_quit(),
             _ => {}
         }
+        Ok(())
     }
 }
