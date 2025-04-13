@@ -24,6 +24,7 @@ pub async fn run() {
     let mut last_step_time = get_time();
     let step_delay = 0.5;
     let mut dragging_index: Option<usize> = None;
+    let mut clicked_enter = false;
 
     loop {
         clear_background(Color::from_rgba(204, 204, 204, 255));
@@ -74,8 +75,11 @@ pub async fn run() {
         if is_key_pressed(KeyCode::Enter) && control_points.len() > 1 {
             curve_steps = generate_curve_steps(&control_points, max_steps);
             animating = true;
+            clicked_enter = false;
             step = 0;
             last_step_time = get_time();
+        } else if is_key_pressed(KeyCode::Enter) && control_points.len() < 1 {
+            clicked_enter = true ;
         }
 
         if is_key_pressed(KeyCode::C) {
@@ -175,13 +179,23 @@ pub async fn run() {
 
         // Empty state message
         if control_points.is_empty() {
-            draw_text(
-                "Click anywhere to add control points",
-                screen_width() / 2.0 - 160.0,
-                screen_height() / 2.0,
-                30.0,
-                DARKGRAY,
-            );
+            if clicked_enter {
+                draw_text(
+                    "Click anywhere to add control points then Press Enter",
+                    screen_width() / 3.0 - 160.0,
+                    screen_height() / 2.0,
+                    30.0,
+                    DARKGRAY,
+                );
+            } else {
+                draw_text(
+                    "Click anywhere to add control points",
+                    screen_width() / 2.0 - 140.0,
+                    screen_height() / 2.0,
+                    30.0,
+                    DARKGRAY,
+                );
+            }
         }
 
         next_frame().await;
