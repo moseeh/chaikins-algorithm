@@ -21,14 +21,21 @@ pub async fn run() {
         };
 
         if is_mouse_button_pressed(MouseButton::Left) && !animating {
-            control_points.push(mouse_pos);
+            let mut near_existing = false;
+
             for (i, point) in control_points.iter().enumerate() {
                 if (point.x - mouse_pos.x).hypot(point.y - mouse_pos.y) < 10.0 {
                     dragging_index = Some(i);
+                    near_existing = true;
                     break;
                 }
             }
+
+            if !near_existing {
+                control_points.push(mouse_pos);
+            }
         }
+
         if is_mouse_button_down(MouseButton::Left) {
             if let Some(i) = dragging_index {
                 control_points[i] = mouse_pos;
