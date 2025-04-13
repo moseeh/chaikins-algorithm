@@ -13,7 +13,7 @@ pub async fn run() {
     let mut dragging_index: Option<usize> = None;
 
     loop {
-        clear_background(WHITE);
+        clear_background(Color::from_rgba(204, 204, 204, 255)); // #CCCCCC
 
         let mouse_pos = Point {
             x: mouse_position().0,
