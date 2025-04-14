@@ -1,4 +1,6 @@
+pub mod chaikin_tests;
 use crate::point::Point;
+
 
 pub fn chaikin(points: &[Point]) -> Vec<Point> {
     if points.len() < 2 {
