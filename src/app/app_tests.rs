@@ -1,9 +1,9 @@
-use crate::app::generate_curve_steps;
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::point::Point;
+    use crate::app::generate_curve_steps;
 
     #[test]
     fn test_generate_curve_steps() {
@@ -42,30 +42,28 @@ mod tests {
     #[test]
     fn test_state_transitions() {
         let mut control_points = vec![];
-        let mut curve_steps = vec![];
-        let mut animating = false;
-        let mut max_steps = 5;
-
+        
         // Test adding points
         control_points.push(Point { x: 10.0, y: 10.0 });
         control_points.push(Point { x: 50.0, y: 50.0 });
         assert_eq!(control_points.len(), 2);
-
-        // Test Enter key
-        curve_steps = generate_curve_steps(&control_points, max_steps);
-        animating = true;
+    
+        // Test Enter key - initialize curve_steps here
+        let mut curve_steps = generate_curve_steps(&control_points, 5);
+        let mut animating = true;
         assert!(!curve_steps.is_empty());
         assert!(animating);
-
+    
         // Test Clear key
         control_points.clear();
-        curve_steps.clear();
+        curve_steps = generate_curve_steps(&control_points, 5);
+        println!("{:?}", curve_steps);
         animating = false;
         assert!(control_points.is_empty());
         assert!(!animating);
-
+    
         // Test step adjustments
-        max_steps = 7;
+        let mut max_steps = 7;
         assert_eq!(max_steps, 7);
         max_steps = (max_steps - 1).clamp(1, 10);
         assert_eq!(max_steps, 6);
