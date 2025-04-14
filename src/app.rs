@@ -1,4 +1,4 @@
-// app.rs
+pub mod app_tests;
 use crate::chaikin::chaikin;
 use crate::point::Point;
 use macroquad::prelude::*;
