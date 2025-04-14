@@ -1,7 +1,6 @@
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::point::Point;
     use crate::app::generate_curve_steps;
 
