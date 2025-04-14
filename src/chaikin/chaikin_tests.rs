@@ -2,6 +2,7 @@
 mod tests {
     use super::*;
     use crate::chaikin::chaikin;
+    use crate::point::Point;
     
     #[test]
     fn test_empty_input() {
